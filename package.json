@@ -1,0 +1,23 @@
+{
+  "name": "normalmap-offline",
+  "version": "1.0.0",
+  "description": "CPetry's NormalMap Generator Online, except it's an offline Electron application for batch processing.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeZombie/NormalMap-Offline.git"
+  },
+  "author": "Christian Petry, Jeremy Clark",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CodeZombie/NormalMap-Offline/issues"
+  },
+  "homepage": "https://github.com/CodeZombie/NormalMap-Offline#readme",
+  "devDependencies": {
+    "electron": "^13.1.4"
+  }
+}

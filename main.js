@@ -1,8 +1,6 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-const localfs = require('get-file-object-from-local-path');
-
 /* Converts the base64 blob data to a buffer that node's WriteFileSyc can use */
 /* https://intoli.com/blog/saving-images/ */
 const parseDataUrl = (dataUrl) => {

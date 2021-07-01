@@ -326,7 +326,18 @@ var NMO_Main = new function(){
 		}		
 	});
 	
-	
+	this.getNormalBlob = function(type, quality=1) {
+		var canvas = document.createElement("canvas");
+		canvas.width = NMO_NormalMap.normal_canvas.width;
+		canvas.height = NMO_NormalMap.normal_canvas.height;
+		var context = canvas.getContext('2d');
+		if (file_type == "png") 
+			context.globalAlpha = $('#transparency_nmb').val() / 100;
+		context.drawImage(NMO_NormalMap.normal_canvas,0,0);
+
+		return canvas.toDataURL(type, quality);
+	};
+
 	this.downloadImage = function(type){
 		console.log("Downloading image");
 		var qual = 0.9;

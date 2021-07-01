@@ -338,6 +338,19 @@ var NMO_Main = new function(){
 		return canvas.toDataURL(type, quality);
 	};
 
+	this.getSpecularBlob = function(type, quality=1) {
+		var canvas = document.createElement("canvas");
+		canvas.width = NMO_SpecularMap.specular_canvas.width;
+		canvas.height = NMO_SpecularMap.specular_canvas.height;
+		var context = canvas.getContext('2d');
+		if (file_type == "png") 
+			context.globalAlpha = $('#transparency_nmb').val() / 100;
+		context.drawImage(NMO_SpecularMap.specular_canvas,0,0);
+		file_name="SpecularMap";
+
+		return canvas.toDataURL(type, quality);
+	};
+
 	this.downloadImage = function(type){
 		console.log("Downloading image");
 		var qual = 0.9;

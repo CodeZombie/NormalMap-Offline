@@ -346,7 +346,6 @@ var NMO_Main = new function(){
 		if (file_type == "png") 
 			context.globalAlpha = $('#transparency_nmb').val() / 100;
 		context.drawImage(NMO_SpecularMap.specular_canvas,0,0);
-		file_name="SpecularMap";
 
 		return canvas.toDataURL(type, quality);
 	};

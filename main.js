@@ -12,49 +12,51 @@ parseDataUrl = (dataUrl) => {
 };
 
 (async () => {
+
     console.log("Starting headless chrome...")
-    const browser = await puppeteer.launch({headless: true, devtools: true, args: ['--disable-web-security', '--disable-features=IsolateOrigins', ' --disable-site-isolation-trials']});
+    const browser = await puppeteer.launch({headless: false, devtools: true, args: ['--disable-web-security', '--disable-features=IsolateOrigins', ' --disable-site-isolation-trials']});
     const page = await browser.newPage();
     await page.goto(`file://${__dirname}/index.html`);
 
 
     console.log("Loading image...")
-
     //grab the upload image file handle
     const uploadImageHandle = await page.$('#select_file_height')
-    //load up our image...
-    await uploadImageHandle.uploadFile('stallman.jpg')
 
-    //Just a test. This must be removed and replaced with a signal from the chrome instance signalling the canvas is ready.
-    await page.waitForTimeout(250);
-
+    //load up our image, setting NMO_FileDrop.ready to false to so that it waits before continuing this script...
+    await page.evaluate( () => {
+      NMO_FileDrop.ready = false;
+    })
+    let x = await uploadImageHandle.uploadFile('stallman.jpg')
+    
+    //wait until the image is loaded inside of the NMO script...
+    let ready = false
+    while (!ready){
+      ready = await page.evaluate( () => {
+        return NMO_FileDrop.ready
+      })
+    }
 
 
     console.log("Generating Normal Map...")
-
     //Get the normal canvas pixel data from Chrome.
     let normalImageData = await page.evaluate(() => {
       return NMO_Main.getNormalBlob("image/png")
     })
-
     //convert the normal canvas pixel data to a buffer that Node can use.
     let normalBuffer = parseDataUrl(normalImageData)
-
     //Save the normal canvas data
     fs.writeFileSync('stallman_normal.png', normalBuffer, 'base64')
 
 
 
     console.log("Generating Specular Map...")
-
     //Get the specular canvas pixel data from Chrome.
     let specularImageData = await page.evaluate(() => {
       return NMO_Main.getSpecularBlob("image/png")
     })
-
     //convert the specular canvas pixel data to a buffer that Node can use.
     let specularBuffer = parseDataUrl(specularImageData)
-
     //Save the specular canvas data
     fs.writeFileSync('stallman_specular.png', specularBuffer, 'base64')
 

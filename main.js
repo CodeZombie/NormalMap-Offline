@@ -82,23 +82,48 @@ async function saveMap(page, map_type, file_type, filename) {
     fs.writeFileSync(filename + extension, buffer, 'base64')
 }
 
+async function processFrames(browser, startFrame, endFrame, frameStep, diffuse_folder, diffuse_name, diffuse_filetype, output_filetype, onFinished) {
+  const page = await browser.newPage();
+
+  await page.goto(`file://${__dirname}/index.html`);
+  for(let i = startFrame; i <= endFrame; i += frameStep) {
+    let startTime = Date.now()
+    let fname = diffuse_name + i.toString()
+    await loadImage(page, diffuse_folder + "/" + fname + "." + diffuse_filetype)
+
+    await saveMap(page, "normal", output_filetype, "normals/" + fname + ".normal")
+
+    await saveMap(page, "specular", output_filetype, "speculars/" + fname + ".specular")
+
+    console.log("Frame: " + i.toString() + " took: " + (Date.now() - startTime).toPrecision(8).toString())
+  }
+
+  
+  onFinished()
+}
+
+
 (async () => {
+  let start_time = Date.now()
+    const total_jobs = 5
+    let finished_jobs = 0
+    async function onJobFinished() {
+      console.log("Finished Job")
+      finished_jobs++
+      if(finished_jobs == total_jobs){
+        console.log("Finished")
+        console.log("Whole process took: " + (Date.now() - start_time).toPrecision(8).toString())
+        await browser.close();
+      }
+    }
 
     const browser = await puppeteer.launch({headless: true, devtools: false, args: ['--disable-web-security', '--disable-features=IsolateOrigins', ' --disable-site-isolation-trials']});
+
+    processFrames(browser, 500, 510, 1, "diffuse_maps", "Head_GeoShape.diffuse.", "jpeg", "jpg", onJobFinished)
+    processFrames(browser, 511, 520, 1, "diffuse_maps", "Head_GeoShape.diffuse.", "jpeg", "jpg", onJobFinished)
+    processFrames(browser, 521, 530, 1, "diffuse_maps", "Head_GeoShape.diffuse.", "jpeg", "jpg", onJobFinished)
+    processFrames(browser, 531, 540, 1, "diffuse_maps", "Head_GeoShape.diffuse.", "jpeg", "jpg", onJobFinished)
+    processFrames(browser, 541, 550, 1, "diffuse_maps", "Head_GeoShape.diffuse.", "jpeg", "jpg", onJobFinished)
+
     
-    const page = await browser.newPage();
-
-    await page.goto(`file://${__dirname}/index.html`);
-    for(let i = 500; i < 551; i++) {
-      console.log(i)
-      let fname = "Head_GeoShape.diffuse." + i.toString()
-      await loadImage(page, "diffuse_maps/" + fname + ".jpeg")
-
-      await saveMap(page, "normal", "jpg", "normals/" + fname + ".normal")
-
-      await saveMap(page, "specular", "jpg", "speculars/" + fname + ".specular")
-    }
-    
-
-    await browser.close();
   })();

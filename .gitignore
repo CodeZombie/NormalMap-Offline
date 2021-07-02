@@ -1,3 +1,7 @@
+/diffuse_maps/*
+/normals/*
+/speculars/*
+
 /SFS
 /images/*
 /Pics/*

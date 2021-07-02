@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/CodeZombie/NormalMap-Offline#readme",
   "devDependencies": {
+    "mkdirp": "^1.0.4",
     "puppeteer": "^10.1.0"
   }
 }

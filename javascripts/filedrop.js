@@ -35,7 +35,7 @@ NMO_FileDrop = new function(){
 	this.height_image;
 	this.picture_above, this.picture_left, this.picture_right, this.picture_below;
 	this.container_height = 300;
-	this.ready = false;
+	this.image_loaded = false;
 
 
 	this.handleDragOver = function(evt) {
@@ -179,7 +179,7 @@ NMO_FileDrop = new function(){
 			
 			NMO_AmbientOccMap.createAmbientOcclusionTexture();
 			NMO_SpecularMap.createSpecularTexture();
-			NMO_FileDrop.ready = true;
+			NMO_FileDrop.image_loaded = true;
 		};
 
 		this.height_image.src = source;

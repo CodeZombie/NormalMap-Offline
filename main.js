@@ -25,15 +25,15 @@ parseDataUrl = (dataUrl) => {
 
     //load up our image, setting NMO_FileDrop.ready to false to so that it waits before continuing this script...
     await page.evaluate( () => {
-      NMO_FileDrop.ready = false;
+      NMO_FileDrop.image_loaded = false;
     })
-    let x = await uploadImageHandle.uploadFile('stallman.jpg')
+    await uploadImageHandle.uploadFile('stallman.jpg')
     
     //wait until the image is loaded inside of the NMO script...
-    let ready = false
-    while (!ready){
-      ready = await page.evaluate( () => {
-        return NMO_FileDrop.ready
+    let image_loaded = false
+    while (!image_loaded){
+      image_loaded = await page.evaluate( () => {
+        return NMO_FileDrop.image_loaded
       })
     }
 
